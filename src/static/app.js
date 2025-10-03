@@ -19,26 +19,20 @@ document.addEventListener("DOMContentLoaded", () => {
         activityCard.className = "activity-card";
 
         const spotsLeft = details.max_participants - details.participants.length;
-
-        // Participants section
-        let participantsHTML = "";
-        if (details.participants.length > 0) {
-          participantsHTML = `
-            <div class="participants-section" style="margin-top: 12px; padding: 10px; background: #eef2fa; border-radius: 6px;">
-              <strong style="color: #3949ab;">Participants:</strong>
-              <ul style="margin: 8px 0 0 18px; padding: 0;">
-                ${details.participants.map(p => `<li style="margin-bottom: 3px; color: #333;">${p}</li>`).join("")}
-              </ul>
-            </div>
-          `;
-        } else {
-          participantsHTML = `
-            <div class="participants-section" style="margin-top: 12px; padding: 10px; background: #eef2fa; border-radius: 6px;">
-              <strong style="color: #3949ab;">Participants:</strong>
-              <p style="margin: 8px 0 0 0; color: #888;">No participants yet.</p>
-            </div>
-          `;
-        }
+        // Create participants list HTML
+        const participantsHTML = `
+          <div class="participants-section">
+            <h5>Current Participants</h5>
+            ${details.participants.length > 0 
+              ? `<ul class="participants-list">
+                  ${details.participants.map(participant => 
+                    `<li class="participant-item">${participant}</li>`
+                  ).join('')}
+                </ul>`
+              : `<p class="no-participants">No participants yet</p>`
+            }
+          </div>
+        `;
 
         activityCard.innerHTML = `
           <h4>${name}</h4>
@@ -83,6 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
         messageDiv.textContent = result.message;
         messageDiv.className = "success";
         signupForm.reset();
+        fetchActivities(); // Refresh activities to show new participant
       } else {
         messageDiv.textContent = result.detail || "An error occurred";
         messageDiv.className = "error";
@@ -105,3 +100,4 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize app
   fetchActivities();
 });
+
